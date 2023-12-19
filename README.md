@@ -1,1 +1,1 @@
-# tax-formalization
+This repository includes the files with the formalizations/proofs related to the article Sarah B. Lawsky, Reasoning with Formalization Statutes: The Case of Capital Gains and Losses. One file includes the operational rules for "excess of," and the other includes the formalizations for the actual capital gains/losses determinations.
