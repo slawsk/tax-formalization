@@ -5,3 +5,5 @@ The definition of the functions is in https://github.com/slawsk/tax-formalizatio
 The operational rules for "excess of" are in https://github.com/slawsk/tax-formalization/blob/main/excessofrules.py
 
 The formalizations for the actual capital gains/losses determinations are in https://github.com/slawsk/tax-formalization/blob/main/formalize.py
+
+There are also txt files with the outputs of running the programs to verify the formalizations.
