@@ -1,0 +1,3 @@
+Rule 1: Extract the Second Sum works
+Rule 2: First Excess Of Equivalent to Subtraction works
+Rule 3: Push Through the First Sum works
