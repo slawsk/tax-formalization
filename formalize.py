@@ -86,7 +86,7 @@ s.add(LTCG >= 0, LTCL >= 0, STCL >= 0, STCG >= 0)
 # of $100. Check whether the models work without it, and then
 # uncomment it to get the counterexamples to be more legible.
 # s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
-      STCL % 100 == 0, STCG % 100 == 0)
+#      STCL % 100 == 0, STCG % 100 == 0)
 
 # Section 1212(b)(1)(A). This does not include the requirement
 # that there be a net capital loss.
