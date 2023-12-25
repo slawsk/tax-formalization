@@ -1,21 +1,21 @@
-Carryforward unused losses works
-Carryforward unused losses require Net Capital Loss does not work
-[LTCL = 1600,
+Carryforward unused losses, no Net Capital Loss requirement works
+Statute v. Worksheet Long, no Net Capital Loss requirement works
+Statute v. Worksheet Short, no Net Capital Loss requirement works
+Carryforward unused losses, require Net Capital Loss does not work
+[LTCL = 100,
  STCG = 100,
- STCL = 100,
- LTCG = 0,
- Other_Income = 700]
-Statute v. Worksheet Long works
-Statute v. Worksheet Short works
-Statute v. Worksheet Long require Net Capital Loss does not work
-[LTCL = 554100,
- STCG = 1978100,
- STCL = 1424100,
- LTCG = 0,
+ STCL = 200,
+ LTCG = 100,
  Other_Income = 0]
-Statute v. Worksheet Short require Net Capital Loss does not work
-[LTCL = 554100,
- STCG = 1978100,
- STCL = 1981200,
- LTCG = 554200,
- Other_Income = 600]
+Statute v. Worksheet Long, require Net Capital Loss does not work
+[LTCL = 400,
+ STCG = 100,
+ STCL = 2700,
+ LTCG = 0,
+ Other_Income = 300]
+Statute v. Worksheet Short, require Net Capital Loss does not work
+[LTCL = 0,
+ STCG = 100,
+ STCL = 3200,
+ LTCG = 100,
+ Other_Income = -100]
