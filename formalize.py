@@ -80,14 +80,6 @@ NCL = fr.excess_of((LTCL + STCL), Permitted_Losses)
 # and other income are all greater than or equal to 0.
 s.add(LTCG >= 0, LTCL >= 0, STCL >= 0, STCG >= 0)
 
-# This constraint just makes the examples easier to read--
-# if something turns out not to be true and the program gives
-# an example, this just says that certain values should be multiples
-# of $100. Check whether the models work without it, and then
-# uncomment it to get the counterexamples to be more legible.
-# s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
-#      STCL % 100 == 0, STCG % 100 == 0)
-
 # Section 1212(b)(1)(A). This does not include the requirement
 # that there be a net capital loss.
 statute_carryover_short = fr.excess_of(NSTCL_for_carryover, NLTCG)
@@ -114,18 +106,6 @@ statute_carryover_total_actual = statute_carryover_short_actual + \
 unused_capital_losses = fr.excess_of(
     (LTCL + STCL), (LTCG + STCG + Section_1212_b_Amount))
 
-# Check to see whether the capital loss carryforwards as prescribed
-# by the statute meet the informal statement that unused capital losses
-# are carried forward. This does not require that there be a net capital loss.
-fr.check_equivalence(s, statute_carryover_total,
-                     unused_capital_losses, "Carryforward unused losses")
-
-# Check to see whether the capital loss carryforwards as prescribed by
-# the statute meet the informal statement that unused capital losses are
-# carried forward. This does require that there be a net capital loss--
-# as the statute requires.
-fr.check_equivalence(s, statute_carryover_total_actual, unused_capital_losses,
-                     "Carryforward unused losses require Net Capital Loss")
 
 # These are the worksheet prescriptions for what to carry over.
 worksheet_carryover_short = fr.excess_of(
@@ -134,23 +114,52 @@ worksheet_carryover_long = fr.excess_of(
     NLTCL, (NSTCG + fr.excess_of(Section_1212_b_Amount, NSTCL)))
 
 
+# Now check the various equivalences. Start by not requiring that
+# there be a net capital loss.
+
+# Check to see whether the capital loss carryforwards as prescribed
+# by the statute meet the informal statement that unused capital losses
+# are carried forward. This does not require that there be a net capital loss.
+fr.check_equivalence(s, statute_carryover_total,
+                     unused_capital_losses,
+                     "Carryforward unused losses, no Net Capital Loss requirement")
+
 # This checks to see whether what the statute says to carry over
 # and what the worksheet says to carry over are the same.
 # It does not include the requirement that there be a net capital loss.
 fr.check_equivalence(s, statute_carryover_long,
-                     worksheet_carryover_long, "Statute v. Worksheet Long")
+                     worksheet_carryover_long,
+                     "Statute v. Worksheet Long, no Net Capital Loss requirement")
 
 fr.check_equivalence(s, statute_carryover_short,
-                     worksheet_carryover_short, "Statute v. Worksheet Short")
+                     worksheet_carryover_short,
+                     "Statute v. Worksheet Short, no Net Capital Loss requirement")
 
 
-# This checks to see whether what the statute says to carry over
+# This constraint just makes the examples easier to read--
+# if something turns out not to be true and the program gives
+# an example, this just says that certain values should be multiples
+# of $100. It is added here so that it does not constrain the earlier
+# checking of the no Net Capital Loss requirement equivalences.
+s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
+      STCL % 100 == 0, STCG % 100 == 0)
+
+# Check to see whether the capital loss carryforwards as prescribed by
+# the statute meet the informal statement that unused capital losses are
+# carried forward. This does require that there be a net capital loss--
+# as the statute requires.
+fr.check_equivalence(s, statute_carryover_total_actual,
+                     unused_capital_losses,
+                     "Carryforward unused losses, require Net Capital Loss")
+
+
+# Check to see whether what the statute says to carry over
 # and what the worksheet says to carry over are the same.
 # It DOES include the requirement that there be a net capital loss.
 fr.check_equivalence(s, statute_carryover_long_actual,
                      worksheet_carryover_long,
-                     "Statute v. Worksheet Long require Net Capital Loss")
+                     "Statute v. Worksheet Long, require Net Capital Loss")
 
 fr.check_equivalence(s, statute_carryover_short_actual,
                      worksheet_carryover_short,
-                     "Statute v. Worksheet Short require Net Capital Loss")
+                     "Statute v. Worksheet Short, require Net Capital Loss")
