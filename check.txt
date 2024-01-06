@@ -1,0 +1,36 @@
+EXCESS OF VERIFICATION
+
+'Rule 1: Extract the Second Sum' works
+
+'Rule 2: First Excess Of Equivalent to Subtraction' works
+
+'Rule 3: Push Through the First Sum' works
+
+CAPITAL GAINS VERIFICATION
+
+'Carryforward unused losses' works
+
+'Carryforward unused losses require Net Capital Loss' does not work. A model in which that rule fails is 
+ [LTCL = 1300,
+ STCG = 300,
+ STCL = 0,
+ LTCG = 0,
+ Other_Income = 0]
+
+'Statute v. Worksheet Long' works
+
+'Statute v. Worksheet Short' works
+
+'Statute v. Worksheet Long require Net Capital Loss' does not work. A model in which that rule fails is 
+ [LTCL = 2715300,
+ STCG = 5915500,
+ STCL = 3202100,
+ LTCG = 0,
+ Other_Income = 100]
+
+'Statute v. Worksheet Short require Net Capital Loss' does not work. A model in which that rule fails is 
+ [LTCL = 1331300,
+ STCG = 0,
+ STCL = 1384200,
+ LTCG = 2715400,
+ Other_Income = 0]
