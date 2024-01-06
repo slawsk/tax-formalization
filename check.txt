@@ -10,27 +10,27 @@ CAPITAL GAINS VERIFICATION
 
 'Carryforward unused losses' works
 
-'Carryforward unused losses require Net Capital Loss' does not work. A model in which that rule fails is 
- [LTCL = 1300,
- STCG = 300,
- STCL = 0,
- LTCG = 0,
- Other_Income = 0]
-
 'Statute v. Worksheet Long' works
 
 'Statute v. Worksheet Short' works
 
+'Carryforward unused losses require Net Capital Loss' does not work. A model in which that rule fails is 
+ [LTCL = 100,
+ STCG = 100,
+ STCL = 200,
+ LTCG = 100,
+ Other_Income = 0]
+
 'Statute v. Worksheet Long require Net Capital Loss' does not work. A model in which that rule fails is 
- [LTCL = 2715300,
- STCG = 5915500,
- STCL = 3202100,
- LTCG = 0,
- Other_Income = 100]
+ [LTCL = 800,
+ STCG = 100,
+ STCL = 200,
+ LTCG = 300,
+ Other_Income = 200]
 
 'Statute v. Worksheet Short require Net Capital Loss' does not work. A model in which that rule fails is 
- [LTCL = 1331300,
+ [LTCL = 200,
  STCG = 0,
- STCL = 1384200,
- LTCG = 2715400,
- Other_Income = 0]
+ STCL = 1779700,
+ LTCG = 1777400,
+ Other_Income = -100]

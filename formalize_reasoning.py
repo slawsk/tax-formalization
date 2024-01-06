@@ -141,13 +141,6 @@ def verify_capital_gain_rules():
     # and other income are all greater than or equal to 0.
     s.add(LTCG >= 0, LTCL >= 0, STCL >= 0, STCG >= 0)
 
-    # This constraint just makes the examples easier to read--
-    # if something turns out not to be true and the program gives
-    # an example, this just says that certain values should be multiples
-    # of $100.
-    s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
-          STCL % 100 == 0, STCG % 100 == 0)
-
     # Section 1212(b)(1)(A). This does not include the requirement
     # that there be a net capital loss.
     statute_carryover_short = excess_of(NSTCL_for_carryover, NLTCG)
@@ -184,13 +177,6 @@ def verify_capital_gain_rules():
                                        unused_capital_losses,
                                        "Carryforward unused losses")
 
-    # Check to see whether the capital loss carryforwards as prescribed by
-    # the statute meet the informal statement that unused capital losses are
-    # carried forward. This does require that there be a net capital loss--
-    # as the statute requires.
-    result_string += check_equivalence(s, statute_carryover_total_actual, unused_capital_losses,
-                                       "Carryforward unused losses require Net Capital Loss")
-
     # These are the worksheet prescriptions for what to carry over.
     worksheet_carryover_short = excess_of(
         NSTCL, (NLTCG + Section_1212_b_Amount))
@@ -201,10 +187,29 @@ def verify_capital_gain_rules():
     # and what the worksheet says to carry over are the same.
     # It does not include the requirement that there be a net capital loss.
     result_string += check_equivalence(s, statute_carryover_long,
-                                       worksheet_carryover_long, "Statute v. Worksheet Long")
+                                       worksheet_carryover_long,
+                                       "Statute v. Worksheet Long")
 
     result_string += check_equivalence(s, statute_carryover_short,
-                                       worksheet_carryover_short, "Statute v. Worksheet Short")
+                                       worksheet_carryover_short,
+                                       "Statute v. Worksheet Short")
+
+    # This constraint just makes the examples easier to read--
+    # if something turns out not to be true and the program gives
+    # an example, this just says that certain values should be multiples
+    # of $100. This had to wait to be added until after the ones that work are
+    # confirmed. These next three examples are going to show that requiring
+    # a net capital loss makes these three rules fail--even with this
+    # constraint.
+    s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
+          STCL % 100 == 0, STCG % 100 == 0)
+
+    # Check to see whether the capital loss carryforwards as prescribed by
+    # the statute meet the informal statement that unused capital losses are
+    # carried forward. This does require that there be a net capital loss--
+    # as the statute requires.
+    result_string += check_equivalence(s, statute_carryover_total_actual, unused_capital_losses,
+                                       "Carryforward unused losses require Net Capital Loss")
 
     # This checks to see whether what the statute says to carry over
     # and what the worksheet says to carry over are the same.
@@ -228,4 +233,4 @@ def check_both_rules():
         file.write(verify_capital_gain_rules())
 
 
-# check_both_rules()
+check_both_rules()
