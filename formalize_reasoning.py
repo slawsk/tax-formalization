@@ -18,7 +18,7 @@ def check_equivalence(s, left_side, right_side, name_of_rule):
     if result == unsat:
         return f"\n'{name_of_rule}' works\n"
     else:
-        return f"\n'{name_of_rule}' does not work. A model in which that rule fails is \n {model}\n"
+        return f"\n'{name_of_rule}' does not work. A model in which that rule fails is\n{model}\n"
 
 
 def lesser_of(x, y):
@@ -155,7 +155,9 @@ def verify_capital_gain_rules():
 
     # The statute says that IF there is net capital loss,
     # then there is carryover. These three formalizations are thus
-    # what the statute actually says.
+    # what the statute actually says. Because the code requires NCL > 0,
+    # it reflects the view that an "excess of" A over B exists only
+    # if A - B > 0.
     statute_carryover_short_actual = If(NCL > 0, statute_carryover_short, 0)
 
     statute_carryover_long_actual = If(NCL > 0, statute_carryover_long, 0)
