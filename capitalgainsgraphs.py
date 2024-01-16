@@ -10,13 +10,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 import photosettings as cp
+import matplotlib.font_manager as font_manager
 
 # Preliminary Items
 
+font_path = '/usr/share/fonts/truetype/adf/GilliusADF-Regular.otf'
+
+gillius_font = font_manager.FontProperties(fname=font_path).get_name()
+
 plt.rcParams.update({
     "text.usetex": False,
-    "font.family": "sans-serif",
-    "font.sans-serif": "Gill Sans MT",
+    "font.family": gillius_font,
 })
 
 relevant_size = cp.ppt_size
@@ -27,19 +31,24 @@ relevant_size = cp.ppt_size
 title_pad = 0  # -.3 is good for title below
 legend_pad = -.2
 
+color_dict = {'color': {'green': 'green', 'red': 'red'},
+              "nocolor": {'green': '0.7', "red": '0.1'}}
+
 LLSL = 'NLTCL & NSTCL\nLoss carryforward'
 LGSG = 'NLTCG & NSTCG\nNet capital gain'
 LLSG = 'NLTCL & NSTCG\nLoss carryforward or capital losses exhausted'
 LGSL = 'NLTCG & NSTCL\nLoss carryforward or net capital gain'
 
 
-def create_loss_fill(ax1, x, y):
-    ax1.fill_between(x, -1, -y, color='green', alpha=0.2,
+def create_loss_fill(ax1, x, y, incolor='color'):
+    fillcolor = color_dict[incolor]['green']
+    ax1.fill_between(x, -1, -y, color=fillcolor, alpha=0.2,
                      interpolate=True, label='Loss carryforward')
 
 
-def create_gain_fill(ax1, x, y):
-    ax1.fill_between(x, 1, -y, where=(x >= 0), color='red',
+def create_gain_fill(ax1, x, y, incolor='color'):
+    fillcolor = color_dict[incolor]['red']
+    ax1.fill_between(x, 1, -y, where=(x >= 0), color=fillcolor,
                      alpha=0.2, interpolate=True, label='Net capital gain')
 
 
@@ -145,11 +154,12 @@ def net_cap_loss():
     plt.savefig('photos/fig_03_net_cap_loss.png', bbox_inches="tight", dpi=300)
 
 
-def net_cap_loss_with_carryforward():
+def net_cap_loss_with_carryforward(incolor='color'):
+    fillcolor = color_dict[incolor]['green']
     fig, ax1, x, y = taxable_income_base()
     ax1.plot([0, 5000], [3000, 3000], color='black', linestyle='--',
              label='Maximum usable excess losses; 1211(b)(1)')
-    ax1.fill_between([0, 5000], 3000, 5000, color='green',
+    ax1.fill_between([0, 5000], 3000, 5000, color=fillcolor,
                      edgecolor='grey', alpha=.2, label='Loss Carryforward')
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
@@ -159,13 +169,14 @@ def net_cap_loss_with_carryforward():
                 bbox_inches="tight", dpi=300)
 
 
-def low_income():
+def low_income(incolor='color'):
+    fillcolor = color_dict[incolor]['green']
     fig, ax1, x, y = taxable_income_base()
     ax1.plot([0, 5000], [3000, 3000], color='black', linestyle='--',
              label='Maximum usable excess losses; 1211(b)(1)')
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
-    ax1.fill_between([0, 5000], 3000, 5000, color='green',
+    ax1.fill_between([0, 5000], 3000, 5000, color=fillcolor,
                      edgecolor='grey', alpha=.2, label='Loss Carryforward')
     ax1.plot([0, 3000], [0, 3000], color='black',
              label='Excess Losses = Adjusted Taxable Income')
@@ -178,13 +189,14 @@ def low_income():
     plt.savefig('photos/fig_05_low_income.png', bbox_inches="tight", dpi=300)
 
 
-def low_income_with_dot():
+def low_income_with_dot(incolor='color'):
+    fillcolor = color_dict[incolor]['green']
     fig, ax1, x, y = taxable_income_base()
     ax1.plot([0, 5000], [3000, 3000], color='black', linestyle='--',
              label='Maximum usable excess losses; 1211(b)(1)')
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
-    ax1.fill_between([0, 5000], 3000, 5000, color='green',
+    ax1.fill_between([0, 5000], 3000, 5000, color=fillcolor,
                      edgecolor='grey', alpha=.2, label='Loss Carryforward')
     ax1.plot([0, 3000], [0, 3000], color='black',
              label='Excess Losses = Adjusted Taxable Income')
@@ -201,13 +213,14 @@ def low_income_with_dot():
                 bbox_inches="tight", dpi=300)
 
 
-def taxable_income_all():
+def taxable_income_all(incolor='color'):
+    fillcolor = color_dict[incolor]['green']
     fig, ax1, x, y = taxable_income_base()
     ax1.plot([0, 5000], [3000, 3000], color='black', linestyle='--',
              label='Maximum usable excess losses; 1211(b)(1)')
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
-    ax1.fill_between([0, 5000], 3000, 5000, color='green',
+    ax1.fill_between([0, 5000], 3000, 5000, color=fillcolor,
                      edgecolor='grey', alpha=.2, label='Loss Carryforward')
     ax1.plot([0, 3000], [0, 3000], color='black',
              label='Excess Losses = Adjusted Taxable Income')
@@ -215,7 +228,7 @@ def taxable_income_all():
 
     ax1.fill_between(y, 3000, y, color='white', hatch='o', edgecolor='grey',
                      alpha=0.2, label='Adjusted Taxable Income < Excess Losses', interpolate=True)
-    ax1.fill_between(y, 3000, y, color='green', alpha=0.2)
+    ax1.fill_between(y, 3000, y, color=fillcolor, alpha=0.2)
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
     plt.title("Figure 7: The Fix: Loss Carryforward and Low Income")
     plt.savefig('photos/fig_07_low_income_correct_carryforward.png',
@@ -292,7 +305,7 @@ def create_hash_labels_graph(LongLossShortLoss, LongGainShortGain, LongLossShort
     plt.savefig(f'photos/{photoname}.png', bbox_inches="tight", dpi=300)
 
 
-def with_dividing_line(LongLossShortLoss, LongGainShortGain, LongLossShortGain, LongGainShortLoss, graphtitle):
+def with_dividing_line(LongLossShortLoss, LongGainShortGain, LongLossShortGain, LongGainShortLoss, graphtitle, incolor='color'):
 
     fig = plt.figure()
     x, y = create_linspace()
@@ -320,8 +333,8 @@ def with_dividing_line(LongLossShortLoss, LongGainShortGain, LongLossShortGain, 
     ax1.text(.66, -.2, 'NLTCG > NSTCL\nNet capital gain\nNLTCG-NSTCL',
              va='top', ha='center')
 
-    create_loss_fill(ax1, x, y)
-    create_gain_fill(ax1, x, y)
+    create_loss_fill(ax1, x, y, incolor)
+    create_gain_fill(ax1, x, y, incolor)
     plt.title(f"{graphtitle}")
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
 
@@ -329,7 +342,8 @@ def with_dividing_line(LongLossShortLoss, LongGainShortGain, LongLossShortGain, 
                 bbox_inches="tight", dpi=300)
 
 
-def with_dividing_line_and_3000(LongLossShortLoss, LongGainShortGain, LongLossShortGain, LongGainShortLoss, graphtitle):
+def with_dividing_line_and_3000(LongLossShortLoss, LongGainShortGain, LongLossShortGain, LongGainShortLoss, graphtitle, incolor='color'):
+    fillcolor = color_dict[incolor]['green']
 
     fig = plt.figure()
     x, y = create_linspace()
@@ -357,14 +371,16 @@ def with_dividing_line_and_3000(LongLossShortLoss, LongGainShortGain, LongLossSh
     # this represents STCG - STCL = LTCG - LTCL + 1212(b)(2)
     z = x + .1
 
-    # offset line; we say negative z because the real thing we want to capture is LTCG - LTCL + 1212(b)(2) < STCL - STCG, not STCL - STCL
+    # offset line; we say negative z because the real thing we want to capture is
+    # LTCG - LTCL + 1212(b)(2) < STCL - STCG, not STCL - STCL
 
     # fill under the
-    ax1.fill_between(x, -1, -z, color='green', alpha=0.2,
-                     interpolate=True, label='Loss carryforward')
-    create_gain_fill(ax1, x, y)
 
-    ax1.plot(x, -z, linestyle='dotted', color='green',
+    ax1.fill_between(x, -1, -z, color=fillcolor, alpha=0.2,
+                     interpolate=True, label='Loss carryforward')
+    create_gain_fill(ax1, x, y, incolor)
+
+    ax1.plot(x, -z, linestyle='dotted', color=fillcolor,
              label='LTCG - LTCL + 1212(b)(2) < STCL - STCG')
 
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
@@ -379,33 +395,33 @@ def create_excess_of_graphs():
     excess_of_A_B()
 
 
-def create_all_net_cap_loss_graphs():
+def create_all_net_cap_loss_graphs(incolor='color'):
     net_cap_loss()
-    net_cap_loss_with_carryforward()
-    low_income()
-    low_income_with_dot()
-    taxable_income_all()
+    net_cap_loss_with_carryforward(incolor=incolor)
+    low_income(incolor=incolor)
+    low_income_with_dot(incolor=incolor)
+    taxable_income_all(incolor=incolor)
 
 
-def create_cap_summary_graphs():
+def create_cap_summary_graphs(incolor='color'):
     create_no_fill_graph()
     create_lt_fill_graph()
     create_st_fill_graph()  # Fig 10
     create_hash_labels_graph(LLSL, LGSG, LLSG, LGSL, 'LTCG>LTCL (NLTCG)',
                              'Figure 11: NLTCG and NSTCG', 'fig_11_long_list')
     with_dividing_line(LLSL, LGSG, LLSG, LGSL,
-                       "Figure 12: Loss Carryforward and Net Capital Gain (Preliminary)")
+                       "Figure 12: Loss Carryforward and Net Capital Gain (Preliminary)", incolor=incolor)
     with_dividing_line_and_3000(
-        LLSL, LGSG, LLSG, LGSL, "Figure 13: Loss Carryforward and Net Capital Gain")
+        LLSL, LGSG, LLSG, LGSL, "Figure 13: Loss Carryforward and Net Capital Gain", incolor=incolor)
 
 
-def create_all_graphs():
+def create_all_graphs(incolor='color'):
     create_excess_of_graphs()
-    create_all_net_cap_loss_graphs()
-    create_cap_summary_graphs()
+    create_all_net_cap_loss_graphs(incolor=incolor)
+    create_cap_summary_graphs(incolor=incolor)
 
 
+create_all_graphs(incolor='nocolor')
 # create_excess_of_graphs()
-# create_all_net_cap_loss_graphs()
-# create_cap_summary_graphs()
-create_all_graphs()
+# create_all_net_cap_loss_graphs(incolor='nocolor')
+# create_cap_summary_graphs(incolor='nocolor')
