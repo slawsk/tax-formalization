@@ -14,14 +14,20 @@ import matplotlib.font_manager as font_manager
 
 # Preliminary Items
 
-font_path = '/usr/share/fonts/truetype/adf/GilliusADF-Regular.otf'
+# gillius_font_path = '/usr/share/fonts/truetype/adf/GilliusADF-Regular.otf'
+# gillius_font = font_manager.FontProperties(fname=gillius_font_path).get_name()
 
-gillius_font = font_manager.FontProperties(fname=font_path).get_name()
+times_font_path = '/home/slawsky/.fonts/times.ttf'
+font_manager.fontManager.addfont(times_font_path)
+times_font = font_manager.FontProperties(fname=times_font_path).get_name()
+
 
 plt.rcParams.update({
     "text.usetex": False,
-    "font.family": gillius_font,
+    "font.family": times_font,
 })
+
+
 
 relevant_size = cp.ppt_size
 # relevant_size = cp.blog_size
@@ -39,6 +45,11 @@ def get_title_name(usage, graphnum):
     else:
         return ""
 
+
+def create_title(plt, usage, graphnum, title_text):
+    if usage != "vataxreview":
+        title_name = get_title_name(usage, graphnum)
+        plt.title(f"{title_name}{title_text}")
 
 LLSL = 'NLTCL & NSTCL\nLoss carryforward'
 LGSG = 'NLTCG & NSTCG\nNet capital gain'
@@ -101,8 +112,7 @@ def excess_of(fignum, **kwargs):
     ax1.fill_between(x, y, 1, color='white', hatch='O', edgecolor='grey',
                      alpha=0.3, label='A < B; A -* B = 0', interpolate=True)
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Excess Of Divides Numerical Space")
+    create_title(plt, usage, graphnum, "Excess Of Divides Numerical Space")
     plt.savefig(f'photos/fig_{graphnum}_excess_of.png',
                 bbox_inches="tight", dpi=300)
 
@@ -125,8 +135,8 @@ def excess_of_A_B(fignum, **kwargs):
     ax1.plot([0, -1], [0, 0], color='black', linewidth=4)
     ax1.axvline(0, c='black', ls='--')
     ax1.axhline(0, c='black', ls='--')
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Subtraction vs. Excess Of")
+
+    create_title(plt, usage, graphnum, "Subtraction vs. Excess Of")
 
     plt.savefig(f'photos/fig_{graphnum}_excess_of_A_B.png',
                 bbox_inches="tight", dpi=300)
@@ -160,8 +170,7 @@ def cliff(fignum, **kwargs):
     # Set x label
     ax1.set_xlabel("Excess of Capital Losses Over Capital Gains")
     ax1.set_ylabel("Loss Carryforward")
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}The Cliff Example: No Adjusted Taxable Income")
+    create_title(plt, usage, graphnum, "The Cliff Example: No Adjusted Taxable Income")
     plt.savefig(f'photos/fig_{graphnum}_cliff.png',
                 bbox_inches="tight", dpi=300)
 
@@ -199,8 +208,7 @@ def net_cap_loss(fignum, **kwargs):
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Net Capital Loss")
+    create_title(plt, usage, graphnum, "Net Capital Loss")
     plt.savefig(f'photos/fig_{graphnum}_net_cap_loss.png',
                 bbox_inches="tight", dpi=300)
 
@@ -218,8 +226,7 @@ def net_cap_loss_with_carryforward(fignum, **kwargs):
     ax1.fill_between([0, 5000], 3000, 5000, color='white', hatch='x',
                      edgecolor='grey', alpha=.2, label='Net Capital Loss')
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}The Statute: Net Capital Loss and Loss Carryforward")
+    create_title(plt, usage, graphnum, "The Statute: Net Capital Loss and Loss Carryforward")
     plt.savefig(f'photos/fig_{graphnum}_net_cap_loss_carryforward.png',
                 bbox_inches="tight", dpi=300)
 
@@ -242,8 +249,7 @@ def low_income(fignum, **kwargs):
     ax1.fill_between(y, 3000, y, color='white', hatch='o', edgecolor='grey',
                      alpha=0.2, label='Adjusted Taxable Income < Excess Losses', interpolate=True)
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}The Statute: Loss Carryforward and Low Income")
+    create_title(plt, usage, graphnum, "The Statute: Loss Carryforward and Low Income")
 
     plt.savefig(f'photos/fig_{graphnum}_low_income.png',
                 bbox_inches="tight", dpi=300)
@@ -270,12 +276,10 @@ def low_income_with_dot(fignum, **kwargs):
     ax1.text(950, 2000, '(\$1000,\$2500)',
              verticalalignment='bottom', horizontalalignment='right')
 
-    title_name = get_title_name(usage, graphnum)
+    create_title(plt, usage, graphnum, "The Statute: Loss Carryforward and Low Income Example")
 
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
 
-    plt.title(
-        f"{title_name}The Statute: Loss Carryforward and Low Income Example")
     plt.savefig(f'photos/fig_{graphnum}_low_income_with_dot.png',
                 bbox_inches="tight", dpi=300)
 
@@ -300,8 +304,7 @@ def taxable_income_all(fignum, **kwargs):
                      alpha=0.2, label='Adjusted Taxable Income < Excess Losses', interpolate=True)
     ax1.fill_between(y, 3000, y, color=fillcolor, alpha=0.2)
     fig.legend(loc='center', bbox_to_anchor=(.5, legend_pad))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}The Fix: Loss Carryforward and Low Income")
+    create_title(plt, usage, graphnum, "The Fix: Loss Carryforward and Low Income")
     plt.savefig(f'photos/fig_{graphnum}_low_income_correct_carryforward.png',
                 bbox_inches="tight", dpi=300)
 
@@ -326,8 +329,7 @@ def create_no_fill_graph(fignum, **kwargs):
     ax1 = fig.add_axes([0, 0, 1, 1])
     create_frame(fig, x, ax1)
     create_axis_labels(ax1)
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}LTCG - LTCL vs. STCG - STCL")
+    create_title(plt, usage, graphnum, "LTCG - LTCL vs. STCG - STCL")
     plt.savefig(f'photos/fig_{graphnum}_all_frame.png',
                 bbox_inches="tight", dpi=300)
 
@@ -344,8 +346,7 @@ def create_lt_fill_graph(fignum, **kwargs):
     create_frame(fig, x, ax1)
     create_axis_labels(ax1)
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Net Long Term Capital Gain")
+    create_title(plt, usage, graphnum, "Net Long Term Capital Gain")
     plt.savefig(f'photos/fig_{graphnum}_lt_fill.png',
                 bbox_inches="tight", dpi=300)
 
@@ -362,8 +363,7 @@ def create_st_fill_graph(fignum, **kwargs):
     create_frame(fig, x, ax1)
     create_axis_labels(ax1)
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Net Short Term Capital Gain")
+    create_title(plt, usage, graphnum, "Net Short Term Capital Gain")
 
     plt.savefig(f'photos/fig_{graphnum}_st_fill.png',
                 bbox_inches="tight", dpi=300)
@@ -392,8 +392,7 @@ def create_hash_labels_graph(fignum, **kwargs):
 
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
 
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}NLTCG and NSTCG")
+    create_title(plt, usage, graphnum, "NLTCG and NSTCG")
 
     plt.savefig(f'photos/fig_{graphnum}_hash_labels.png',
                 bbox_inches="tight", dpi=300)
@@ -435,9 +434,7 @@ def with_dividing_line(fignum, **kwargs):
     create_loss_fill(ax1, x, y, incolor)
     create_gain_fill(ax1, x, y, incolor)
 
-    title_name = get_title_name(usage, graphnum)
-    plt.title(
-        f"{title_name}Loss Carryforward and Net Capital Gain (Preliminary)")
+    create_title(plt, usage, graphnum, "Loss Carryforward and Net Capital Gain (Preliminary)")
 
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
 
@@ -492,8 +489,7 @@ def with_dividing_line_and_3000(fignum, **kwargs):
 
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
 
-    title_name = get_title_name(usage, graphnum)
-    plt.title(f"{title_name}Loss Carryforward and Net Capital Gain")
+    create_title(plt, usage, graphnum, "Loss Carryforward and Net Capital Gain")
 
     plt.savefig(f'photos/fig_{graphnum}_dividing_line_and_OI.png',
                 bbox_inches="tight", dpi=300)
@@ -524,4 +520,4 @@ def create_list_graphs(graphlist, incolor_value="nocolor", usage_value="paper"):
         fig_value += 1
 
 
-create_list_graphs(all_graphs_list)
+create_list_graphs(all_graphs_list,usage_value='vataxreview')
