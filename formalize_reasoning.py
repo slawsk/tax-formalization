@@ -29,7 +29,7 @@ def lesser_of(x, y):
 
 def verify_excess_of_rules():
 
-    s = Solver()
+    s = Optimize()
 
     a = Real('a')
     b = Real('b')
@@ -64,7 +64,7 @@ def verify_excess_of_rules():
 
 
 def verify_capital_gain_rules():
-    s = Solver()
+    s = Optimize()
 
     # Capital gains and losses are integers because numbers
     # on the tax return will generally be rounded to the nearest
@@ -169,6 +169,17 @@ def verify_capital_gain_rules():
     unused_capital_losses = excess_of(
         (LTCL + STCL), (LTCG + STCG + Section_1212_b_Amount))
 
+    # The next "rules" are soft constraints to make the examples
+    # easier to read. If something turns out not to be true and
+    # the program gives an example, these rules ask that certain values
+    # be multiples of $100. Because these are soft constraints,
+    # they can be ignored if necessary to find a model.
+    s.add_soft(Other_Income % 100 == 0, 1, "c1")
+    s.add_soft(LTCL % 100 == 0, 1, "c2")
+    s.add_soft(LTCG % 100 == 0, 1, "c3")
+    s.add_soft(STCL % 100 == 0, 1, "c4")
+    s.add_soft(STCG % 100 == 0, 1, "c5")
+
     result_string = ""
 
     # Check to see whether the capital loss carryforwards as prescribed
@@ -196,15 +207,8 @@ def verify_capital_gain_rules():
                                        worksheet_carryover_short,
                                        "Statute v. Worksheet Short")
 
-    # This constraint just makes the examples easier to read--
-    # if something turns out not to be true and the program gives
-    # an example, this just says that certain values should be multiples
-    # of $100. This had to wait to be added until after the ones that work are
-    # confirmed. These next three examples are going to show that requiring
-    # a net capital loss makes these three rules fail--even with this
-    # constraint.
-    s.add(Other_Income % 100 == 0, LTCL % 100 == 0, LTCG % 100 == 0,
-          STCL % 100 == 0, STCG % 100 == 0)
+    # The next three examples are going to show that requiring
+    # a net capital loss makes these three rules fail.
 
     # Check to see whether the capital loss carryforwards as prescribed by
     # the statute meet the informal statement that unused capital losses are
