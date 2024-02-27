@@ -173,7 +173,7 @@ def verify_capital_gain_rules():
     # easier to read. If something turns out not to be true and
     # the program gives an example, these rules ask that certain values
     # be multiples of $100. Because these are soft constraints,
-    # they can be ignored if necessary to find a model.
+    # they will be ignored by the program if necessary to find a model.
     s.add_soft(Other_Income % 100 == 0, 1, "c1")
     s.add_soft(LTCL % 100 == 0, 1, "c2")
     s.add_soft(LTCG % 100 == 0, 1, "c3")
