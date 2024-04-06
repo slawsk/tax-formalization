@@ -39,17 +39,34 @@ color_dict = {'color': {'green': 'green', 'red': 'red'},
               "nocolor": {'green': '0.7', "red": '0.1'}}
 
 
+
+credit_standard_over = .0
+credit_standard_up = -.35
+credit_fontsize = 8
+credit_wrap_over = -1
+credit_wrap_up = -15
+source_language = 'Source: Sarah B. Lawsky, Reasoning with Formalized Statutes: The Case of Capital Gains and Losses, 43 Va. Tax Rev. (2024)'
+
 def get_title_name(usage, graphnum):
-    if usage == "paper":
+    if usage == "paper" or usage == "website":
         return f"Figure {graphnum}: "
     else:
         return ""
 
 
-def create_title(plt, usage, graphnum, title_text):
+def create_title(plt, usage, graphnum, title_text,credit='normal'):
     if usage != "vataxreview":
         title_name = get_title_name(usage, graphnum)
         plt.title(f"{title_name}{title_text}")
+    if usage == "website":
+        if credit != "odd":
+            plt.figtext(credit_standard_over,credit_standard_up, source_language, horizontalalignment='left', color='black',fontsize=credit_fontsize, wrap=True)
+
+
+
+
+
+
 
 LLSL = 'NLTCL & NSTCL\nLoss carryforward'
 LGSG = 'NLTCG & NSTCG\nNet capital gain'
@@ -94,6 +111,7 @@ def create_axis_labels(ax1):
 
 
 def excess_of(fignum, **kwargs):
+
     usage = kwargs.get('usage', 'paper')
     fig = plt.figure()
     x, y = create_linspace()
@@ -113,12 +131,16 @@ def excess_of(fignum, **kwargs):
                      alpha=0.3, label='A < B; A -* B = 0', interpolate=True)
     fig.legend(loc='center', bbox_to_anchor=(.5, -.2))
     create_title(plt, usage, graphnum, "Excess Of Divides Numerical Space")
+
+
     plt.savefig(f'photos/fig_{graphnum}_excess_of.png',
                 bbox_inches="tight", dpi=300)
 
 
 def excess_of_A_B(fignum, **kwargs):
+
     usage = kwargs.get('usage', 'paper')
+
     fig = plt.figure()
     x, y = create_linspace()
     graphnum = "{:02d}".format(fignum)
@@ -135,8 +157,8 @@ def excess_of_A_B(fignum, **kwargs):
     ax1.plot([0, -1], [0, 0], color='black', linewidth=4)
     ax1.axvline(0, c='black', ls='--')
     ax1.axhline(0, c='black', ls='--')
-
-    create_title(plt, usage, graphnum, "Subtraction vs. Excess Of")
+    create_title(plt, usage, graphnum, "Subtraction vs. Excess Of",credit = "odd")
+    plt.figtext(-1,-1.3, source_language, horizontalalignment='left', color='black',fontsize=credit_fontsize, wrap=True)
 
     plt.savefig(f'photos/fig_{graphnum}_excess_of_A_B.png',
                 bbox_inches="tight", dpi=300)
@@ -520,4 +542,5 @@ def create_list_graphs(graphlist, incolor_value="nocolor", usage_value="paper"):
         fig_value += 1
 
 
-create_list_graphs(all_graphs_list,usage_value='vataxreview')
+# possibilities: vataxreview, paper, website
+create_list_graphs(all_graphs_list,incolor_value="nocolor",usage_value='website')
